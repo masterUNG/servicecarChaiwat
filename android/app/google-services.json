@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "82396635324",
+    "project_id": "servicecar-e2d51",
+    "storage_bucket": "servicecar-e2d51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82396635324:android:b11802d2988eea62cdb0b9",
+        "android_client_info": {
+          "package_name": "com.devbizkittum.tumservicecar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "82396635324-h03u9058teur6kjlpdisev13u09oip69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDEs68rRtJJ6TnWTabnRlvSYp7I0xLi2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "82396635324-h03u9058teur6kjlpdisev13u09oip69.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
