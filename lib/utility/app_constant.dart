@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppConstant {
+
+  
   static Color dark = Colors.black;
+  static String uidAdmin = 'vnnl1HWW1aNNH2Yg5ZUPVVtJ9X02';
 
   BoxDecoration bgBox() {
     return const BoxDecoration(
       image: DecorationImage(
-        image: AssetImage('images/bg.jpg'),fit: BoxFit.cover
-      ),
+          image: AssetImage('images/bg.jpg'), fit: BoxFit.cover),
     );
   }
 

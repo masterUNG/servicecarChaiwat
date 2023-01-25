@@ -1,16 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tumservicecar/states/create_new_account.dart';
+import 'package:tumservicecar/states/main_home.dart';
 import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
+import 'package:tumservicecar/utility/app_snack_bar.dart';
 import 'package:tumservicecar/widgets/widget_button.dart';
 import 'package:tumservicecar/widgets/widget_form.dart';
 import 'package:tumservicecar/widgets/widget_head.dart';
 import 'package:tumservicecar/widgets/widget_icon_button.dart';
 import 'package:tumservicecar/widgets/widget_text_button.dart';
 
-class Authen extends StatelessWidget {
+class Authen extends StatefulWidget {
   const Authen({super.key});
+
+  @override
+  State<Authen> createState() => _AuthenState();
+}
+
+class _AuthenState extends State<Authen> {
+  String? email, password;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +46,9 @@ class Authen extends StatelessWidget {
                       children: [
                         WidgetForm(
                           hint: 'Email',
-                          changeFunc: (p0) {},
+                          changeFunc: (p0) {
+                            email = p0.trim();
+                          },
                         ),
                       ],
                     ),
@@ -45,7 +57,9 @@ class Authen extends StatelessWidget {
                       children: [
                         WidgetForm(
                           hint: 'password',
-                          changeFunc: (p0) {},
+                          changeFunc: (p0) {
+                            password = p0.trim();
+                          },
                           obsecu: appController.obSecu.value,
                           subfixWidget: WidgetIconButton(
                             iconData: Icons.remove_red_eye,
@@ -67,7 +81,18 @@ class Authen extends StatelessWidget {
                             children: [
                               WidgetButton(
                                 label: 'login',
-                                pressFunc: () {},
+                                pressFunc: () {
+                                  if ((email?.isEmpty ?? true) ||
+                                      (password?.isEmpty ?? true)) {
+                                    AppSnackBar().narmalSnackbar(
+                                        title: 'Have space?',
+                                        message: 'Please Fill Every Blank',
+                                        bgColor:
+                                            Theme.of(context).primaryColor);
+                                  } else {
+                                    processCheckLogin();
+                                  }
+                                },
                                 width: 125,
                               ),
                             ],
@@ -87,5 +112,21 @@ class Authen extends StatelessWidget {
             );
           }),
     );
+  }
+
+  Future<void> processCheckLogin() async {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email!, password: password!)
+        .then((value) {
+      Get.offAll(const MainHome());
+      AppSnackBar().narmalSnackbar(
+          title: 'Welcome to App', message: 'Welcome Service Car');
+    }).catchError((onError) {
+      AppSnackBar().narmalSnackbar(
+          title: onError.code,
+          message: onError.message,
+          bgColor: Colors.red,
+          textColor: Colors.white);
+    });
   }
 }
