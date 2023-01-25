@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/widgets/widget_text.dart';
 
@@ -7,10 +8,12 @@ class WidgetTextButton extends StatelessWidget {
     Key? key,
     required this.label,
     required this.pressFunc,
+    this.textColor,
   }) : super(key: key);
 
   final String label;
   final Function() pressFunc;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,9 @@ class WidgetTextButton extends StatelessWidget {
       onPressed: pressFunc,
       child: WidgetText(
         text: label,
-        textStyle: AppConstant().h3Style(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),
+        textStyle: AppConstant().h3Style(
+            color: textColor ?? Theme.of(context).primaryColor,
+            fontWeight: FontWeight.bold),
       ),
     );
   }
