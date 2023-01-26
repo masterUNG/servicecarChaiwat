@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tumservicecar/models/car_model.dart';
 import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
 import 'package:tumservicecar/utility/app_service.dart';
@@ -124,20 +127,35 @@ class _AddCarState extends State<AddCar> {
                             pressFunc: () {
                               if (appController.xFiles.isEmpty) {
                                 AppSnackBar().narmalSnackbar(
-                                    title: 'ยังไม่มีรูปรถ',
-                                    message: 'กรูณาเลือกรูปรถอย่างน้อย 1 รูป');
+                                  title: 'ยังไม่มีรูปรถ',
+                                  message: 'กรูณาเลือกรูปรถอย่างน้อย 1 รูป',
+                                  bgColor: Colors.red.shade700,
+                                  textColor: Colors.white,
+                                  snackPosition: SnackPosition.TOP,
+                                );
                               } else if ((band?.isEmpty ?? true) ||
                                   (type?.isEmpty ?? true) ||
                                   (colorCar?.isEmpty ?? true) ||
                                   (registerCar?.isEmpty ?? true)) {
                                 AppSnackBar().narmalSnackbar(
-                                    title: 'กรอกไม่ครบ',
-                                    message: 'กรุณากรอกให้ครบ');
+                                  title: 'กรอกไม่ครบ',
+                                  message: 'กรุณากรอกให้ครบ',
+                                  bgColor: Colors.red.shade700,
+                                  textColor: Colors.white,
+                                  snackPosition: SnackPosition.TOP,
+                                );
                               } else {
                                 AppService()
                                     .processUploadMultiImage()
                                     .then((value) {
-                                  print('upload finish --> ${appController.images}');
+                                  print(
+                                      'upload finish --> ${appController.images}');
+                                  var images = <String>[];
+                                  for (var element in appController.images) {
+                                    images.add(element);
+                                  }
+
+                                  processInsertCar(images: images);
                                 });
                               }
                             },
@@ -151,5 +169,29 @@ class _AddCarState extends State<AddCar> {
             });
       }),
     );
+  }
+
+  Future<void> processInsertCar({required List<String> images}) async {
+    CarModel model = CarModel(
+        brand: band!,
+        type: type!,
+        color: colorCar!,
+        register: registerCar!,
+        images: images,
+        timeRecord: Timestamp.fromDate(dateTime));
+
+    var user = FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user!.uid)
+        .collection('car')
+        .doc()
+        .set(model.toMap())
+        .then((value) {
+          Get.back();
+      AppSnackBar().narmalSnackbar(
+          title: 'Insert Car success', message: 'WelCome insert Car succes');
+      
+    });
   }
 }

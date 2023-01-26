@@ -35,10 +35,11 @@ class CarModel {
       type: map['type'] ?? '',
       color: map['color'] ?? '',
       register: map['register'] ?? '',
-      images: (map['images'] ?? []),
+      images: List<String>.from(map['images'] ??  []),
       timeRecord: (map['timeRecord']),
     );
   }
+//timeRecord: (map['timeRecord']),
 
   String toJson() => json.encode(toMap());
 

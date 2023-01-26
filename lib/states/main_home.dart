@@ -26,7 +26,7 @@ class _MainHomeState extends State<MainHome> {
 
   var titles = <String>[
     'Feture',
-    'Profile',
+    'My Car',
   ];
 
   @override
@@ -73,7 +73,7 @@ class _MainHomeState extends State<MainHome> {
                     currentAccountPicture: WidgetImage(),
                   ),
                   WidgetMenu(
-                    title: 'Feture',
+                    title: titles[0],
                     leadWidget: const WidgetImage(
                       path: 'images/feture.png',
                       width: 48,
@@ -84,8 +84,8 @@ class _MainHomeState extends State<MainHome> {
                     },
                   ),
                   WidgetMenu(
-                    title: 'Profile',
-                    leadWidget: WidgetImage(
+                    title: titles[1],
+                    leadWidget: const WidgetImage(
                       path: 'images/profile.png',
                       width: 48,
                     ),
