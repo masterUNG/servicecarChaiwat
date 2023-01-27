@@ -5,13 +5,13 @@ class UserModel {
   final String uid;
   final String email;
   final String password;
-  final List<String> docIdFetures;
+  
   UserModel({
     required this.displayName,
     required this.uid,
     required this.email,
     required this.password,
-    required this.docIdFetures,
+    
   });
 
   Map<String, dynamic> toMap() {
@@ -20,7 +20,7 @@ class UserModel {
       'uid': uid,
       'email': email,
       'password': password,
-      'docIdFetures': docIdFetures,
+      
     };
   }
 
@@ -30,7 +30,7 @@ class UserModel {
       uid: map['uid'] ?? '',
       email: map['email'] ?? '',
       password: map['password'] ?? '',
-      docIdFetures: List<String>.from(map['docIdFetures'] ??  []),
+     
     );
   }
 

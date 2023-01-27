@@ -6,13 +6,45 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:tumservicecar/models/car_model.dart';
+import 'package:tumservicecar/models/expire_model.dart';
 import 'package:tumservicecar/models/feture_model.dart';
 import 'package:tumservicecar/models/user_model.dart';
 import 'package:tumservicecar/states/authen.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
 
 class AppService {
+  String changeToString({required Timestamp timestamp}) {
+    DateTime dateTime = timestamp.toDate();
+    DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+    return dateFormat.format(dateTime);
+  }
+
+  Future<void> readExpireModels({required String docIdCar}) async {
+    AppController appController = Get.put(AppController());
+    if (appController.expireModels.isNotEmpty) {
+      appController.expireModels.clear();
+    }
+    var user = FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user!.uid)
+        .collection('car')
+        .doc(docIdCar)
+        .collection('expire')
+        .get()
+        .then((value) {
+      print('##27jan readExpireModel --> ${value.docs.length}');
+      if (value.docs.isNotEmpty) {
+        for (var element in value.docs) {
+          ExpireModel model = ExpireModel.fromMap(element.data());
+          appController.expireModels.add(model);
+        }
+      }
+    }).catchError((onError) {});
+  }
+
   Future<void> processUploadMultiImage() async {
     AppController appController = Get.put(AppController());
 

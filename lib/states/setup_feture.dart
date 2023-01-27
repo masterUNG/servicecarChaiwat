@@ -105,18 +105,18 @@ class _SetupFetureState extends State<SetupFeture> {
                                   textColor: Colors.white);
                             } else {
                               String docIdCar = widget.docIdCar;
-                              print('docIdCar --> ${docIdCar}');
+                              print('##27jan docIdCar --> $docIdCar');
 
                               ExpireModel expireModel = ExpireModel(
-                                  feture: widget.fetureModel.feture,
-                                  timeExpire: Timestamp.fromDate(
-                                      appController.chooseDateTime.last));
-
-                              print('expired --> ${expireModel.toMap()}');
+                                feture: widget.fetureModel.feture,
+                                timeExpire: Timestamp.fromDate(
+                                    appController.chooseDateTime.last),
+                                docIdFeture: widget.docIdFetures,
+                              );
 
                               var user = FirebaseAuth.instance.currentUser;
 
-                              //step 1;
+                              //step 1; Insert Expire Data
                               await FirebaseFirestore.instance
                                   .collection('user')
                                   .doc(user!.uid)
@@ -124,30 +124,7 @@ class _SetupFetureState extends State<SetupFeture> {
                                   .doc(docIdCar)
                                   .collection('expire')
                                   .doc()
-                                  .set(expireModel.toMap());
-
-                              //step 2;
-
-                              UserModel userModel =
-                                  appController.userModels.last;
-                              Map<String, dynamic> map = userModel.toMap();
-                              print('map ก่อน -->$map');
-
-                              var docIdFetures = <String>[];
-                              if (map['docIdFetures'].isEmpty) {
-                                docIdFetures.add(widget.docIdFetures);
-                              } else {
-                                for (var element in map['docIdFetures']) {
-                                  docIdFetures.add(element);
-                                }
-                                docIdFetures.add(widget.docIdFetures);
-                              }
-                              map['docIdFetures'] = docIdFetures;
-                              print('map หลัง -->$map');
-                              await FirebaseFirestore.instance
-                                  .collection('user')
-                                  .doc(user.uid)
-                                  .update(map)
+                                  .set(expireModel.toMap())
                                   .then((value) {
                                 appController.chooseDateTime.clear();
                                 Get.back();

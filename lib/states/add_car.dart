@@ -178,7 +178,7 @@ class _AddCarState extends State<AddCar> {
         color: colorCar!,
         register: registerCar!,
         images: images,
-        timeRecord: Timestamp.fromDate(dateTime));
+        timeRecord: Timestamp.fromDate(dateTime), );
 
     var user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance

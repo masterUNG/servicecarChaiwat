@@ -9,6 +9,7 @@ class CarModel {
   final String register;
   final List<String> images;
   final Timestamp timeRecord;
+  
   CarModel({
     required this.brand,
     required this.type,
@@ -16,6 +17,7 @@ class CarModel {
     required this.register,
     required this.images,
     required this.timeRecord,
+   
   });
 
   Map<String, dynamic> toMap() {
@@ -26,6 +28,7 @@ class CarModel {
       'register': register,
       'images': images,
       'timeRecord': timeRecord,
+      
     };
   }
 
@@ -35,8 +38,9 @@ class CarModel {
       type: map['type'] ?? '',
       color: map['color'] ?? '',
       register: map['register'] ?? '',
-      images: List<String>.from(map['images'] ??  []),
+      images: List<String>.from(map['images'] ??[]),
       timeRecord: (map['timeRecord']),
+      
     );
   }
 //timeRecord: (map['timeRecord']),

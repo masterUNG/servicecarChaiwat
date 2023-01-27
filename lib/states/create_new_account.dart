@@ -100,7 +100,7 @@ class _CreatNewAccountState extends State<CreatNewAccount> {
         .then((value) async {
       String uid = value.user!.uid;
       UserModel model = UserModel(
-          displayName: name!, uid: uid, email: email!, password: password!, docIdFetures: []);
+          displayName: name!, uid: uid, email: email!, password: password!, );
 
       await FirebaseFirestore.instance
           .collection('user')

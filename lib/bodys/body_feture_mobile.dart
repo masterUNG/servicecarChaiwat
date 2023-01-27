@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tumservicecar/models/feture_model.dart';
@@ -5,6 +7,7 @@ import 'package:tumservicecar/states/detail_car.dart';
 import 'package:tumservicecar/states/setup_feture.dart';
 import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
+import 'package:tumservicecar/utility/app_service.dart';
 import 'package:tumservicecar/widgets/widget_image_internet.dart';
 import 'package:tumservicecar/widgets/widget_text.dart';
 import 'package:tumservicecar/widgets/widget_text_button.dart';
@@ -38,33 +41,11 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
                                   crossAxisCount: 3),
                           itemBuilder: (context, index) => InkWell(
                             onTap: () {
-                              print(
-                                  'You tab docId -->> ${appController.docIdFetures[index]}');
-                              print(
-                                  'docIdFeture in userModel--->${appController.userModels.last.docIdFetures.length}');
-                              var docIdFetures = <String>[];
-
-                              if (appController
-                                  .userModels.last.docIdFetures.isEmpty) {
-                                print('No Doc');
-
-                                processChooseCar(
-                                    fetureModel:
-                                        appController.fetureModels[index],
-                                    appController: appController,
-                                    docIdFeture:
-                                        appController.docIdFetures[index],
-                                    haveDoc: false);
-                              } else {
-                                //have doc
-                                processChooseCar(
-                                    fetureModel:
-                                        appController.fetureModels[index],
-                                    appController: appController,
-                                    docIdFeture:
-                                        appController.docIdFetures[index],
-                                    haveDoc: true);
-                              }
+                              processChooseCar(
+                                fetureModel: appController.fetureModels[index],
+                                appController: appController,
+                                docIdFeture: appController.docIdFetures[index],
+                              );
                             },
                             child: Card(
                               child: Column(
@@ -115,11 +96,11 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
     return haveFeture;
   }
 
-  void processChooseCar(
-      {required FetureModel fetureModel,
-      required AppController appController,
-      required String docIdFeture,
-      required bool haveDoc}) {
+  void processChooseCar({
+    required FetureModel fetureModel,
+    required AppController appController,
+    required String docIdFeture,
+  }) {
     Get.dialog(
       AlertDialog(
         icon: WidgetImageNetwork(
@@ -144,19 +125,18 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
                   label: appController.carModels[index].brand,
                   size: 18,
                   pressFunc: () {
-                    Get.back();
+                    String docIdCar = appController.docIdCars[index];
+                    print('##27jan docIdCar ที่เลือก $docIdCar');
 
-                    if (haveDoc) {
-                      //have doc
+                    AppService()
+                        .readExpireModels(docIdCar: docIdCar)
+                        .then((value) async {
+                      print(
+                          '##27jan expireModels -->${appController.expireModels.length}');
 
-                      
-
-                      if (checkStatus(appController: appController, index: index)?? true) {
-                        // ไปดู detail
-
-                      } else {
-                        
-                        //ไปเพิ่ม feture
+                      if (appController.expireModels.isEmpty) {
+                        //ไม่มี expire เลย
+                        Get.back();
                         Get.to(
                           SetupFeture(
                             docIdFetures: docIdFeture,
@@ -165,20 +145,42 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
                             docIdCar: appController.docIdCars[index],
                           ),
                         );
+                      } else {
+                        // มี expire แล้ว
 
+                        var user = FirebaseAuth.instance.currentUser;
+                        await FirebaseFirestore.instance
+                            .collection('user')
+                            .doc(user!.uid)
+                            .collection('car')
+                            .doc(docIdCar)
+                            .collection('expire')
+                            .where('docIdFeture', isEqualTo: docIdFeture)
+                            .get()
+                            .then((value) {
+                          if (value.docs.isEmpty) {
+                            // ยังไม่เคยมี feture นี่
+                            Get.back();
+                            Get.to(
+                              SetupFeture(
+                                docIdFetures: docIdFeture,
+                                carModel: appController.carModels[index],
+                                fetureModel: fetureModel,
+                                docIdCar: appController.docIdCars[index],
+                              ),
+                            );
+                          } else {
+                            //มี feture นี่แล้ว
+                            Get.back();
+                            Get.to(DetailCar(
+                              docIdCar: docIdCar,
+                              carModel: appController.carModels[index],
+                            ));
+                          }
+                        });
                       }
-                    } else {
-                      //no doc
-                      Get.to(
-                        SetupFeture(
-                          docIdFetures: docIdFeture,
-                          carModel: appController.carModels[index],
-                          fetureModel: fetureModel,
-                          docIdCar: appController.docIdCars[index],
-                        ),
-                      );
-                    }
-                  },
+                    });
+                  }, //end
                 ),
                 WidgetText(
                   text: appController.carModels[index].type,
