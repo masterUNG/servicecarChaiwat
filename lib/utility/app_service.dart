@@ -48,6 +48,7 @@ class AppService {
 
     if (appController.carModels.isNotEmpty) {
       appController.carModels.clear();
+      appController.docIdCars.clear();
     }
 
     var user = FirebaseAuth.instance.currentUser;
@@ -61,6 +62,7 @@ class AppService {
         for (var element in value.docs) {
           CarModel model = CarModel.fromMap(element.data());
           appController.carModels.add(model);
+          appController.docIdCars.add(element.id);
         }
       }
     });
@@ -90,12 +92,14 @@ class AppService {
     AppController appController = Get.put(AppController());
     if (appController.fetureModels.isNotEmpty) {
       appController.fetureModels.clear();
+      appController.docIdFetures.clear();
     }
 
     await FirebaseFirestore.instance.collection('feture').get().then((value) {
       for (var element in value.docs) {
         FetureModel model = FetureModel.fromMap(element.data());
         appController.fetureModels.add(model);
+        appController.docIdFetures.add(element.id);
       }
     });
   }

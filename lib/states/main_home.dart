@@ -34,6 +34,7 @@ class _MainHomeState extends State<MainHome> {
     super.initState();
     AppService().findUserModel();
     AppService().findCarModels();
+    AppService().processReadFeture();
   }
 
   @override

@@ -11,9 +11,14 @@ class AppController extends GetxController {
   RxList files = <File>[].obs;
   RxList urlImages = <String>[].obs;
   RxList fetureModels = <FetureModel>[].obs;
+  RxList docIdFetures =<String>[].obs;
   RxInt indexBody = 0.obs;
   RxList userModels = <UserModel>[].obs;
+
   RxList carModels = <CarModel>[].obs;
+  RxList docIdCars =<String>[].obs;
+
   RxList xFiles = <XFile>[].obs;
   RxList images =<String>[].obs;
+  RxList chooseDateTime =<DateTime>[].obs;
 }

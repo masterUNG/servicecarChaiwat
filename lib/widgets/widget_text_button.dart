@@ -9,11 +9,13 @@ class WidgetTextButton extends StatelessWidget {
     required this.label,
     required this.pressFunc,
     this.textColor,
+    this.size,
   }) : super(key: key);
 
   final String label;
   final Function() pressFunc;
   final Color? textColor;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,8 @@ class WidgetTextButton extends StatelessWidget {
         text: label,
         textStyle: AppConstant().h3Style(
             color: textColor ?? Theme.of(context).primaryColor,
-            fontWeight: FontWeight.bold),
+            fontWeight: FontWeight.bold,
+            size: size),
       ),
     );
   }

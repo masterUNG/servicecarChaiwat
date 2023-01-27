@@ -16,6 +16,7 @@ class AppDialog {
     Widget? iconWidget,
     Widget? firstActionWidget,
     Widget? secondActionWidget,
+    
   }) {
     Get.dialog(
       AlertDialog(
