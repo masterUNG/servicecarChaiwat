@@ -53,25 +53,17 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
                                         appController.fetureModels[index],
                                     appController: appController,
                                     docIdFeture:
-                                        appController.docIdFetures[index]);
+                                        appController.docIdFetures[index],
+                                    haveDoc: false);
                               } else {
-                                print(
-                                    '${appController.docIdFetures[index]} Have Doc  ${appController.userModels.last.docIdFetures}');
-
-                                var docIdFetures = <String>[];
-                                for (var element in appController
-                                    .userModels.last.docIdFetures) {
-                                  docIdFetures.add(element);
-                                }
-                                print('docIdFeture -->> $docIdFetures');
-
-                                if (docIdFetures.contains(
-                                    appController.docIdFetures[index])) {
-                                  print('มี Feture นี่แล้ว');
-                                  Get.to(const DetailCar());
-                                } else {
-                                  print('ไม่มี feture นี่');
-                                }
+                                //have doc
+                                processChooseCar(
+                                    fetureModel:
+                                        appController.fetureModels[index],
+                                    appController: appController,
+                                    docIdFeture:
+                                        appController.docIdFetures[index],
+                                    haveDoc: true);
                               }
                             },
                             child: Card(
@@ -105,10 +97,29 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
     });
   }
 
+  bool? checkStatus(
+      {required AppController appController, required int index}) {
+    bool? haveFeture;
+    var docIdFetures = <String>[];
+    for (var element in appController.userModels.last.docIdFetures) {
+      docIdFetures.add(element);
+    }
+
+    if (docIdFetures.contains(appController.docIdFetures[index])) {
+      print('มี Feture นี่แล้ว');
+      haveFeture = true;
+    } else {
+      print('ไม่มี feture นี่');
+      haveFeture = false;
+    }
+    return haveFeture;
+  }
+
   void processChooseCar(
       {required FetureModel fetureModel,
       required AppController appController,
-      required String docIdFeture}) {
+      required String docIdFeture,
+      required bool haveDoc}) {
     Get.dialog(
       AlertDialog(
         icon: WidgetImageNetwork(
@@ -134,23 +145,39 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
                   size: 18,
                   pressFunc: () {
                     Get.back();
-                    
-                    if (condition) {
-                      //ไปเพิ่ม feture
-                      Get.to(
-                      SetupFeture(
-                        docIdFetures: docIdFeture,
-                        carModel: appController.carModels[index],
-                        fetureModel: fetureModel,
-                        docIdCar: appController.docIdCars[index],
-                      ),
-                    );
-                      
-                    } else {
-                      //ไปดู detail
-                      
-                    }
 
+                    if (haveDoc) {
+                      //have doc
+
+                      
+
+                      if (checkStatus(appController: appController, index: index)?? true) {
+                        // ไปดู detail
+
+                      } else {
+                        
+                        //ไปเพิ่ม feture
+                        Get.to(
+                          SetupFeture(
+                            docIdFetures: docIdFeture,
+                            carModel: appController.carModels[index],
+                            fetureModel: fetureModel,
+                            docIdCar: appController.docIdCars[index],
+                          ),
+                        );
+
+                      }
+                    } else {
+                      //no doc
+                      Get.to(
+                        SetupFeture(
+                          docIdFetures: docIdFeture,
+                          carModel: appController.carModels[index],
+                          fetureModel: fetureModel,
+                          docIdCar: appController.docIdCars[index],
+                        ),
+                      );
+                    }
                   },
                 ),
                 WidgetText(
