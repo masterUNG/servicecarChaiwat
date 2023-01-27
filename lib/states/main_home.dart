@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:tumservicecar/bodys/body_feture_mobile.dart';
 import 'package:tumservicecar/bodys/body_profile_mobile.dart';
 import 'package:tumservicecar/models/expire_model.dart';
+import 'package:tumservicecar/states/web_view.dart';
 import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
 import 'package:tumservicecar/utility/app_dialog.dart';
@@ -211,6 +212,16 @@ class _MainHomeState extends State<MainHome> {
                           title: 'ทดสอบแจ้งเตือน',
                           body: 'รายละเอียดของการแจ้งเตือน');
                       Get.back();
+                    },
+                  ),
+                  WidgetMenu(
+                    title: 'WebView',
+                    leadWidget: Icon(
+                      Icons.web,
+                      size: 28,
+                    ),
+                    pressFunc: () {
+                      Get.to(const WebView());
                     },
                   ),
                   const Spacer(),
