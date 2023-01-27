@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:tumservicecar/models/car_model.dart';
 import 'package:tumservicecar/utility/app_constant.dart';
@@ -23,12 +24,16 @@ class DetailCar extends StatefulWidget {
 }
 
 class _DetailCarState extends State<DetailCar> {
+ 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     AppService().readExpireModels(docIdCar: widget.docIdCar);
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +68,7 @@ class _DetailCarState extends State<DetailCar> {
                   text: widget.carModel.register,
                   textStyle: AppConstant().h3Style(),
                 ),
-                WidgetTextButton(
-                  label: 'ทดสอบระบบแจ้งเตือน',
-                  pressFunc: () {},
-                ),
+                
                 const Divider(
                   color: Colors.black,
                 ),
