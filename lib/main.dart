@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tumservicecar/states/add_feture.dart';
 import 'package:tumservicecar/states/authen.dart';
 import 'package:tumservicecar/states/authen_admin.dart';
@@ -42,16 +43,19 @@ String? keyPage;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance
+    ..initialize()
+    ..updateRequestConfiguration(RequestConfiguration(testDeviceIds: []));
 
   if (kIsWeb) {
     await Firebase.initializeApp(
-            options: const FirebaseOptions(
-                apiKey: 'AIzaSyAuAXIVS4fMJWwGz04plY1V2xzCAKtKiJA',
-                appId: '1:82396635324:web:808f9a6eb0715883cdb0b9',
-                messagingSenderId: '82396635324',
-                projectId: 'servicecar-e2d51',
-                storageBucket: "servicecar-e2d51.appspot.com",))
-        .then((value) {
+        options: const FirebaseOptions(
+      apiKey: 'AIzaSyAuAXIVS4fMJWwGz04plY1V2xzCAKtKiJA',
+      appId: '1:82396635324:web:808f9a6eb0715883cdb0b9',
+      messagingSenderId: '82396635324',
+      projectId: 'servicecar-e2d51',
+      storageBucket: "servicecar-e2d51.appspot.com",
+    )).then((value) {
       // keyPage = '/authenAdmin';
       keyPage = '/mainHomeAdmin';
 

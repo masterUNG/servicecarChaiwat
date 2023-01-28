@@ -46,7 +46,7 @@ dependencies:
   intl: ^0.17.0
   flutter_local_notifications: ^13.0.0
   webview_flutter: ^4.0.2
-  # google_mobile_ads: ^2.3.0
+  google_mobile_ads: ^2.3.0
 
 dev_dependencies:
   flutter_test:

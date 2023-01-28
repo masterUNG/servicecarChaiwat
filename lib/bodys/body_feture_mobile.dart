@@ -2,12 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tumservicecar/models/feture_model.dart';
 import 'package:tumservicecar/states/detail_car.dart';
 import 'package:tumservicecar/states/setup_feture.dart';
+import 'package:tumservicecar/utility/adhelper.dart';
 import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
 import 'package:tumservicecar/utility/app_service.dart';
+import 'package:tumservicecar/widgets/widget_button.dart';
 import 'package:tumservicecar/widgets/widget_image_internet.dart';
 import 'package:tumservicecar/widgets/widget_text.dart';
 import 'package:tumservicecar/widgets/widget_text_button.dart';
@@ -20,6 +23,99 @@ class BodyfetureMobile extends StatefulWidget {
 }
 
 class _BodyfetureMobileState extends State<BodyfetureMobile> {
+  //ใส่ Admob
+  BannerAd? _bannerAd;
+  bool _isBannerAdReady = false;
+
+  InterstitialAd? _interstitialAd;
+
+  int _numInterstitialLoadAttempts = 0;
+
+  num? maxFailedLoadAttempts;
+
+  @override
+  void initState() {
+    super.initState();
+    _createInterstitialAd();
+    autoOpen();
+  }
+
+  Future<void> autoOpen() async {
+    await Future.delayed(
+      Duration(seconds: 5),
+      () {
+        _showInterstitialAd();
+      },
+    );
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print('$ad loaded');
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error.');
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < maxFailedLoadAttempts!) {
+              _createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
+
+  // void _loadBannerAd() {
+  //   _bannerAd = BannerAd(
+  //     adUnitId: AdHelper.bannerAdUnitId,
+  //     request: const AdRequest(),
+  //     size: AdSize.banner,
+  //     listener: BannerAdListener(
+  //       onAdLoaded: (_) {
+  //         setState(() {
+  //           _isBannerAdReady = true;
+  //         });
+  //       },
+  //       onAdFailedToLoad: (ad, err) {
+  //         _isBannerAdReady = false;
+  //         ad.dispose();
+  //       },
+  //     ),
+  //   );
+
+  //   _bannerAd!.load();
+  // }
+  //End Admob
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, BoxConstraints boxConstraints) {
@@ -67,10 +163,27 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
                             ),
                           ),
                         ),
+
                         Positioned(
-                          bottom: 0,
-                          child: WidgetText(text: 'Ad mob'),
-                        ),
+                            bottom: 0,
+                            child: WidgetButton(
+                              label: 'Test Ad',
+                              pressFunc: () {
+                                _showInterstitialAd();
+                              },
+                            ))
+
+                        // การ call Admob
+                        // Positioned(
+                        //   bottom: 0,
+                        //   child: _isBannerAdReady
+                        //       ? SizedBox(width: boxConstraints.maxWidth,height: 150,
+                        //           child: AdWidget(ad: _bannerAd!),
+                        //         )
+                        //       : const SizedBox(),
+                        // ),
+
+                        // End Call Admob
                       ],
                     ),
                   );
