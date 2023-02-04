@@ -12,10 +12,11 @@ class AppDialog {
 
   void normalDialog({
     required String title,
-    required String subTitle,
+    String?  subTitle,
     Widget? iconWidget,
     Widget? firstActionWidget,
     Widget? secondActionWidget,
+    Widget? contentWidget,
     
   }) {
     Get.dialog(
@@ -25,8 +26,8 @@ class AppDialog {
           text: title,
           textStyle: AppConstant().h2Style(),
         ),
-        content: WidgetText(
-          text: subTitle,
+        content:contentWidget ?? WidgetText(
+          text: subTitle ?? '',
           textStyle: AppConstant().h3Style(),
         ),
         actions: [

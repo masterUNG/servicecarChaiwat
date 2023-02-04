@@ -24,4 +24,5 @@ class AppController extends GetxController {
   RxList chooseDateTime =<DateTime>[].obs;
 
   RxList expireModels =<ExpireModel>[].obs;
+  RxList docIdExpires =<String>[].obs;
 }

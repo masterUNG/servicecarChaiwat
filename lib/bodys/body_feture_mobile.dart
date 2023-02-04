@@ -45,6 +45,7 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
       Duration(seconds: 5),
       () {
         _showInterstitialAd();
+        _loadBannerAd();
       },
     );
   }
@@ -94,26 +95,26 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
     _interstitialAd = null;
   }
 
-  // void _loadBannerAd() {
-  //   _bannerAd = BannerAd(
-  //     adUnitId: AdHelper.bannerAdUnitId,
-  //     request: const AdRequest(),
-  //     size: AdSize.banner,
-  //     listener: BannerAdListener(
-  //       onAdLoaded: (_) {
-  //         setState(() {
-  //           _isBannerAdReady = true;
-  //         });
-  //       },
-  //       onAdFailedToLoad: (ad, err) {
-  //         _isBannerAdReady = false;
-  //         ad.dispose();
-  //       },
-  //     ),
-  //   );
+  void _loadBannerAd() {
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
 
-  //   _bannerAd!.load();
-  // }
+    _bannerAd!.load();
+  }
   //End Admob
 
   @override
@@ -164,24 +165,27 @@ class _BodyfetureMobileState extends State<BodyfetureMobile> {
                           ),
                         ),
 
-                        Positioned(
-                            bottom: 0,
-                            child: WidgetButton(
-                              label: 'Test Ad',
-                              pressFunc: () {
-                                _showInterstitialAd();
-                              },
-                            ))
-
-                        // การ call Admob
                         // Positioned(
                         //   bottom: 0,
-                        //   child: _isBannerAdReady
-                        //       ? SizedBox(width: boxConstraints.maxWidth,height: 150,
-                        //           child: AdWidget(ad: _bannerAd!),
-                        //         )
-                        //       : const SizedBox(),
+                        //   child: WidgetButton(
+                        //     label: 'Test Ad',
+                        //     pressFunc: () {
+                        //       _showInterstitialAd();
+                        //     },
+                        //   ),
                         // ),
+
+                        // การ call Admob
+                        Positioned(
+                          bottom: 0,
+                          child: _isBannerAdReady
+                              ? SizedBox(
+                                  width: boxConstraints.maxWidth,
+                                  height: 150,
+                                  child: AdWidget(ad: _bannerAd!),
+                                )
+                              : const SizedBox(),
+                        ),
 
                         // End Call Admob
                       ],

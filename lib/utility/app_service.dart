@@ -25,6 +25,7 @@ class AppService {
     AppController appController = Get.put(AppController());
     if (appController.expireModels.isNotEmpty) {
       appController.expireModels.clear();
+      appController.docIdExpires.clear();
     }
     var user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance
@@ -40,6 +41,7 @@ class AppService {
         for (var element in value.docs) {
           ExpireModel model = ExpireModel.fromMap(element.data());
           appController.expireModels.add(model);
+          appController.docIdExpires.add(element.id);
         }
       }
     }).catchError((onError) {});
