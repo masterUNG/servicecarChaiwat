@@ -7,6 +7,9 @@ import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
 import 'package:tumservicecar/utility/app_dialog.dart';
 import 'package:tumservicecar/utility/app_service.dart';
+import 'package:tumservicecar/utility/app_snack_bar.dart';
+import 'package:tumservicecar/widgets/widget_form.dart';
+import 'package:tumservicecar/widgets/widget_icon_button.dart';
 
 import 'package:tumservicecar/widgets/widget_text.dart';
 import 'package:tumservicecar/widgets/widget_text_button.dart';
@@ -28,12 +31,16 @@ class DetailCar extends StatefulWidget {
 class _DetailCarState extends State<DetailCar> {
   var user = FirebaseAuth.instance.currentUser;
   Map<String, dynamic> data = {};
+  CarModel? carModel;
+  String? docIdCar;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     AppService().readExpireModels(docIdCar: widget.docIdCar);
+    carModel = widget.carModel;
+    docIdCar = widget.docIdCar;
   }
 
   @override
@@ -53,21 +60,77 @@ class _DetailCarState extends State<DetailCar> {
             return ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               children: [
-                WidgetText(
-                  text: widget.carModel.brand,
-                  textStyle: AppConstant().h2Style(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    WidgetText(
+                      text: carModel!.brand,
+                      textStyle: AppConstant().h2Style(),
+                    ),
+                    WidgetIconButton(
+                      iconData: Icons.edit,
+                      pressFunc: () {
+                        processEditDataCar(
+                            string: carModel!.brand,
+                            keyMap: 'brand',
+                            appController: appController);
+                      },
+                    ),
+                  ],
                 ),
-                WidgetText(
-                  text: widget.carModel.type,
-                  textStyle: AppConstant().h3Style(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    WidgetText(
+                      text: carModel!.type,
+                      textStyle: AppConstant().h3Style(),
+                    ),
+                    WidgetIconButton(
+                      iconData: Icons.edit,
+                      pressFunc: () {
+                        processEditDataCar(
+                            string: carModel!.type,
+                            keyMap: 'type',
+                            appController: appController);
+                      },
+                    ),
+                  ],
                 ),
-                WidgetText(
-                  text: widget.carModel.color,
-                  textStyle: AppConstant().h3Style(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    WidgetText(
+                      text: carModel!.color,
+                      textStyle: AppConstant().h3Style(),
+                    ),
+                    WidgetIconButton(
+                      iconData: Icons.edit,
+                      pressFunc: () {
+                        processEditDataCar(
+                            string: carModel!.color,
+                            keyMap: 'color',
+                            appController: appController);
+                      },
+                    ),
+                  ],
                 ),
-                WidgetText(
-                  text: widget.carModel.register,
-                  textStyle: AppConstant().h3Style(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    WidgetText(
+                      text: carModel!.register,
+                      textStyle: AppConstant().h3Style(),
+                    ),
+                    WidgetIconButton(
+                      iconData: Icons.edit,
+                      pressFunc: () {
+                        processEditDataCar(
+                            string: carModel!.register,
+                            keyMap: 'register',
+                            appController: appController);
+                      },
+                    ),
+                  ],
                 ),
                 const Divider(
                   color: Colors.black,
@@ -164,5 +227,57 @@ class _DetailCarState extends State<DetailCar> {
             );
           }),
     );
+  }
+
+  void processEditDataCar(
+      {required String string,
+      required String keyMap,
+      required AppController appController}) {
+    TextEditingController textEditingController = TextEditingController();
+    textEditingController.text = string;
+
+    String? newText;
+
+    Widget widget = WidgetForm(
+      hint: '',
+      changeFunc: (p0) {
+        newText = p0.trim();
+      },
+      textEditingController: textEditingController,
+    );
+    AppDialog(context: context).normalDialog(
+        title: 'Edit ข้อมูลของรถ',
+        contentWidget: widget,
+        secondActionWidget: WidgetTextButton(
+          label: 'Edit',
+          pressFunc: () async {
+            if (newText?.isEmpty ?? true) {
+              Get.back();
+              AppSnackBar().narmalSnackbar(
+                  title: 'ไม่มีการเปลี่ยนแปลง',
+                  message: 'คุณไม่ได้แก้ไขข้อมูล',
+                  bgColor: Colors.red,
+                  textColor: Colors.white);
+            } else {
+              Map<String, dynamic> map = carModel!.toMap();
+              map[keyMap] = newText;
+
+              await FirebaseFirestore.instance
+                  .collection('user')
+                  .doc(user!.uid)
+                  .collection('car')
+                  .doc(docIdCar)
+                  .update(map)
+                  .then((value) {
+                print('##26jan edit car success');
+                Get.back();
+                AppService().findCarModels().then((value) {
+                  carModel = CarModel.fromMap(map);
+                  setState(() {});
+                });
+              });
+            }
+          },
+        ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:tumservicecar/utility/app_constant.dart';
 
 class WidgetForm extends StatelessWidget {
@@ -10,6 +11,7 @@ class WidgetForm extends StatelessWidget {
     this.obsecu,
     this.subfixWidget,
     this.textInputType,
+    this.textEditingController,
   }) : super(key: key);
 
   final String hint;
@@ -18,6 +20,7 @@ class WidgetForm extends StatelessWidget {
   final bool? obsecu;
   final Widget? subfixWidget;
   final TextInputType? textInputType;
+  final TextEditingController? textEditingController;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,9 @@ class WidgetForm extends StatelessWidget {
       margin: const EdgeInsets.only(top: 16),
       width: width ?? 250,
       height: 40,
-      child: TextFormField(style:  AppConstant().h3Style(),
+      child: TextFormField(
+        controller: textEditingController,
+        style: AppConstant().h3Style(),
         keyboardType: textInputType,
         obscureText: obsecu ?? false,
         onChanged: changeFunc,

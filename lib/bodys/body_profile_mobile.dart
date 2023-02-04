@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tumservicecar/states/add_car.dart';
 import 'package:tumservicecar/states/detail_car.dart';
+import 'package:tumservicecar/states/process_add_car.dart';
 import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
+import 'package:tumservicecar/utility/app_dialog.dart';
 import 'package:tumservicecar/utility/app_service.dart';
 import 'package:tumservicecar/widgets/widget_button.dart';
 import 'package:tumservicecar/widgets/widget_image_internet.dart';
 import 'package:tumservicecar/widgets/widget_text.dart';
+import 'package:tumservicecar/widgets/widget_text_button.dart';
 
 class BodyProfileMobile extends StatefulWidget {
   const BodyProfileMobile({super.key});
@@ -37,7 +40,8 @@ class _BodyProfileMobileState extends State<BodyProfileMobile> {
                       itemBuilder: (context, index) => InkWell(
                         onTap: () {
                           Get.to(DetailCar(
-                              docIdCar: appController.docIdCars[index], carModel: appController.carModels[index]));
+                              docIdCar: appController.docIdCars[index],
+                              carModel: appController.carModels[index]));
                         },
                         child: Card(
                           child: Row(
@@ -88,9 +92,22 @@ class _BodyProfileMobileState extends State<BodyProfileMobile> {
               floatingActionButton: WidgetButton(
                 label: 'Add Car',
                 pressFunc: () {
-                  Get.to(const AddCar())!.then((value) {
-                    AppService().findCarModels();
-                  });
+                  if (appController.carModels.length >= 2) {
+                    AppDialog(context: context).normalDialog(
+                        title: 'รถเกิน 2 คัน',
+                        subTitle: 'รถเกิน 2 คันต้องเพิ่มรถก่อนคะ',
+                        secondActionWidget: WidgetTextButton(
+                          label: 'เพิ่มรถ',
+                          pressFunc: () {
+                            Get.back();
+                            Get.to(const ProcessAddCar());
+                          },
+                        ));
+                  } else {
+                    Get.to(const AddCar())!.then((value) {
+                      AppService().findCarModels();
+                    });
+                  }
                 },
               ),
             );
