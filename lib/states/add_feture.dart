@@ -94,7 +94,7 @@ class _AddFetureState extends State<AddFeture> {
                             label: 'Add New Feture',
                             pressFunc: () async {
                               if (appController.urlImages.isEmpty) {
-                                AppSnackBar().narmalSnackbar(
+                                AppSnackBar().normalSnackbar(
                                   title: 'No Photo',
                                   message: 'Plase take photo',
                                   bgColor: Colors.red.shade900,
@@ -102,7 +102,7 @@ class _AddFetureState extends State<AddFeture> {
                                   snackPosition: SnackPosition.TOP,
                                 );
                               } else if (feture?.isEmpty ?? true) {
-                                AppSnackBar().narmalSnackbar(
+                                AppSnackBar().normalSnackbar(
                                   title: 'No Feture?',
                                   message: 'Please fill feture in Blank',
                                   bgColor: Colors.red.shade900,

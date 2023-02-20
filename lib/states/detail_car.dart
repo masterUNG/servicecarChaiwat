@@ -217,6 +217,46 @@ class _DetailCarState extends State<DetailCar> {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.red),
                                   ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      WidgetIconButton(
+                                        iconData: Icons.delete,
+                                        pressFunc: () async {
+                                          AppDialog(context: context)
+                                              .normalDialog(
+                                            title: 'ต้องการลบออก\nใช่หรือไม่ ?',
+                                            contentWidget: WidgetText(
+                                                text:
+                                                    '${appController.expireModels[index].feture}'),
+                                            secondActionWidget:
+                                                WidgetTextButton(
+                                              label: 'Delete Expire',
+                                              pressFunc: () async {
+                                                Get.back();
+
+                                                await FirebaseFirestore.instance
+                                                    .collection('user')
+                                                    .doc(user!.uid)
+                                                    .collection('car')
+                                                    .doc(widget.docIdCar)
+                                                    .collection('expire')
+                                                    .doc(appController
+                                                        .docIdExpires[index])
+                                                    .delete()
+                                                    .then((value) {
+                                                  print('##26jan Delete Success');
+                                                  AppService().readExpireModels(
+                                                      docIdCar:
+                                                          widget.docIdCar);
+                                                });
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -253,7 +293,7 @@ class _DetailCarState extends State<DetailCar> {
           pressFunc: () async {
             if (newText?.isEmpty ?? true) {
               Get.back();
-              AppSnackBar().narmalSnackbar(
+              AppSnackBar().normalSnackbar(
                   title: 'ไม่มีการเปลี่ยนแปลง',
                   message: 'คุณไม่ได้แก้ไขข้อมูล',
                   bgColor: Colors.red,

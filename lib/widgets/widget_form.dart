@@ -11,7 +11,7 @@ class WidgetForm extends StatelessWidget {
     this.obsecu,
     this.subfixWidget,
     this.textInputType,
-    this.textEditingController,
+    this.textEditingController, 
   }) : super(key: key);
 
   final String hint;

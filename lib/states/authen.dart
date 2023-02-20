@@ -84,7 +84,7 @@ class _AuthenState extends State<Authen> {
                                 pressFunc: () {
                                   if ((email?.isEmpty ?? true) ||
                                       (password?.isEmpty ?? true)) {
-                                    AppSnackBar().narmalSnackbar(
+                                    AppSnackBar().normalSnackbar(
                                         title: 'Have space?',
                                         message: 'Please Fill Every Blank',
                                         bgColor:
@@ -119,10 +119,10 @@ class _AuthenState extends State<Authen> {
         .signInWithEmailAndPassword(email: email!, password: password!)
         .then((value) {
       Get.offAll(const MainHome());
-      AppSnackBar().narmalSnackbar(
+      AppSnackBar().normalSnackbar(
           title: 'Welcome to App', message: 'Welcome Service Car');
     }).catchError((onError) {
-      AppSnackBar().narmalSnackbar(
+      AppSnackBar().normalSnackbar(
           title: onError.code,
           message: onError.message,
           bgColor: Colors.red,

@@ -8,6 +8,7 @@ import 'package:tumservicecar/utility/app_controller.dart';
 import 'package:tumservicecar/utility/app_dialog.dart';
 import 'package:tumservicecar/utility/app_service.dart';
 import 'package:tumservicecar/widgets/widget_button.dart';
+import 'package:tumservicecar/widgets/widget_icon_button.dart';
 import 'package:tumservicecar/widgets/widget_image_internet.dart';
 import 'package:tumservicecar/widgets/widget_text.dart';
 import 'package:tumservicecar/widgets/widget_text_button.dart';
@@ -60,7 +61,7 @@ class _BodyProfileMobileState extends State<BodyProfileMobile> {
                                 margin: const EdgeInsets.only(
                                     top: 4, bottom: 4, right: 8),
                                 width: boxConstraints.maxWidth * 0.7 - 32,
-                                height: boxConstraints.maxWidth * 0.3,
+                                height: boxConstraints.maxWidth * 0.4,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

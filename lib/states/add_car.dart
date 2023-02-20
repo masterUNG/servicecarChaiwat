@@ -126,7 +126,7 @@ class _AddCarState extends State<AddCar> {
                             label: 'ลงทะเบียน',
                             pressFunc: () {
                               if (appController.xFiles.isEmpty) {
-                                AppSnackBar().narmalSnackbar(
+                                AppSnackBar().normalSnackbar(
                                   title: 'ยังไม่มีรูปรถ',
                                   message: 'กรูณาเลือกรูปรถอย่างน้อย 1 รูป',
                                   bgColor: Colors.red.shade700,
@@ -137,7 +137,7 @@ class _AddCarState extends State<AddCar> {
                                   (type?.isEmpty ?? true) ||
                                   (colorCar?.isEmpty ?? true) ||
                                   (registerCar?.isEmpty ?? true)) {
-                                AppSnackBar().narmalSnackbar(
+                                AppSnackBar().normalSnackbar(
                                   title: 'กรอกไม่ครบ',
                                   message: 'กรุณากรอกให้ครบ',
                                   bgColor: Colors.red.shade700,
@@ -173,12 +173,13 @@ class _AddCarState extends State<AddCar> {
 
   Future<void> processInsertCar({required List<String> images}) async {
     CarModel model = CarModel(
-        brand: band!,
-        type: type!,
-        color: colorCar!,
-        register: registerCar!,
-        images: images,
-        timeRecord: Timestamp.fromDate(dateTime), );
+      brand: band!,
+      type: type!,
+      color: colorCar!,
+      register: registerCar!,
+      images: images,
+      timeRecord: Timestamp.fromDate(dateTime),
+    );
 
     var user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance
@@ -188,10 +189,9 @@ class _AddCarState extends State<AddCar> {
         .doc()
         .set(model.toMap())
         .then((value) {
-          Get.back();
-      AppSnackBar().narmalSnackbar(
+      Get.back();
+      AppSnackBar().normalSnackbar(
           title: 'Insert Car success', message: 'WelCome insert Car succes');
-      
     });
   }
 }

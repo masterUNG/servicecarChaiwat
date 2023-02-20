@@ -77,7 +77,7 @@ class _CreatNewAccountState extends State<CreatNewAccount> {
                     if ((name?.isEmpty ?? true) ||
                         (email?.isEmpty ?? true) ||
                         (password?.isEmpty ?? true)) {
-                      AppSnackBar().narmalSnackbar(
+                      AppSnackBar().normalSnackbar(
                           title: 'Have space',
                           message: 'Please Every Blank',
                           bgColor: Colors.red.withOpacity(0.5));
@@ -100,21 +100,24 @@ class _CreatNewAccountState extends State<CreatNewAccount> {
         .then((value) async {
       String uid = value.user!.uid;
       UserModel model = UserModel(
-          displayName: name!, uid: uid, email: email!, password: password!, );
+        displayName: name!,
+        uid: uid,
+        email: email!,
+        password: password!,
+      );
 
       await FirebaseFirestore.instance
           .collection('user')
           .doc(uid)
           .set(model.toMap())
           .then((value) {
-            Get.back();
-        AppSnackBar().narmalSnackbar(
+        Get.back();
+        AppSnackBar().normalSnackbar(
             title: 'Create New Account Success', message: 'Please login');
-        
       });
     }).catchError((onError) {
       AppSnackBar()
-          .narmalSnackbar(title: onError.code, message: onError.message);
+          .normalSnackbar(title: onError.code, message: onError.message);
     });
   }
 }

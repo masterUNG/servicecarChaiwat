@@ -2,7 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 
 class AppSnackBar {
-  void narmalSnackbar({
+  void normalSnackbar({
     required String title,
     required String message,
     Color? bgColor,

@@ -77,7 +77,7 @@ class _AuthenAdminState extends State<AuthenAdmin> {
                               pressFunc: () {
                                 if ((email?.isEmpty ?? true) ||
                                     (password?.isEmpty ?? true)) {
-                                  AppSnackBar().narmalSnackbar(
+                                  AppSnackBar().normalSnackbar(
                                     title: 'Have Space?',
                                     message: 'Please Fill Every Blank',
                                     snackPosition: SnackPosition.TOP,
@@ -109,13 +109,13 @@ class _AuthenAdminState extends State<AuthenAdmin> {
       if (uid == AppConstant.uidAdmin) {
         //Admin true
         Get.offAll(const MainHomeAdmin());
-        AppSnackBar().narmalSnackbar(
+        AppSnackBar().normalSnackbar(
             title: 'login Success',
             message: 'Welcome to Web Admin',
             snackPosition: SnackPosition.TOP,
             bgColor: Theme.of(context).primaryColor);
       } else {
-        AppSnackBar().narmalSnackbar(
+        AppSnackBar().normalSnackbar(
           title: 'No Permission Admin',
           message: 'This Account please use in mobile',
           snackPosition: SnackPosition.TOP,
@@ -124,7 +124,7 @@ class _AuthenAdminState extends State<AuthenAdmin> {
         );
       }
     }).catchError((onError) {
-      AppSnackBar().narmalSnackbar(
+      AppSnackBar().normalSnackbar(
         title: onError.code,
         message: onError.message,
         snackPosition: SnackPosition.TOP,

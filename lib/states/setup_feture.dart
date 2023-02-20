@@ -97,7 +97,7 @@ class _SetupFetureState extends State<SetupFeture> {
                           label: 'Setup',
                           pressFunc: () async {
                             if (appController.chooseDateTime.isEmpty) {
-                              AppSnackBar().narmalSnackbar(
+                              AppSnackBar().normalSnackbar(
                                   title: 'วันหมดอายุ',
                                   message: 'โปรดเลือกวันหมดอายุ',
                                   snackPosition: SnackPosition.TOP,
