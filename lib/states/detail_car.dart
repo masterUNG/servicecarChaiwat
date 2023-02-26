@@ -2,7 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tumservicecar/bodys/body_profile_mobile.dart';
+import 'package:tumservicecar/main.dart';
 import 'package:tumservicecar/models/car_model.dart';
+import 'package:tumservicecar/states/add_car.dart';
+import 'package:tumservicecar/states/authen_admin.dart';
+import 'package:tumservicecar/states/main_home.dart';
 import 'package:tumservicecar/utility/app_constant.dart';
 import 'package:tumservicecar/utility/app_controller.dart';
 import 'package:tumservicecar/utility/app_dialog.dart';
@@ -132,6 +137,19 @@ class _DetailCarState extends State<DetailCar> {
                     ),
                   ],
                 ),
+                Card(
+                  child: WidgetTextButton(
+                    label: 'Delete Car',
+                    size: 18,
+                    textColor: Colors.red.shade700,
+                    pressFunc: () async {
+                      processDeleteCar(
+                          string: carModel!.register,
+                          appController: appController,
+                          keyMap: 'register');
+                    },
+                  ),
+                ),
                 const Divider(
                   color: Colors.black,
                 ),
@@ -245,7 +263,8 @@ class _DetailCarState extends State<DetailCar> {
                                                         .docIdExpires[index])
                                                     .delete()
                                                     .then((value) {
-                                                  print('##26jan Delete Success');
+                                                  print(
+                                                      '##26jan Delete Success');
                                                   AppService().readExpireModels(
                                                       docIdCar:
                                                           widget.docIdCar);
@@ -256,7 +275,7 @@ class _DetailCarState extends State<DetailCar> {
                                         },
                                       ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -311,13 +330,67 @@ class _DetailCarState extends State<DetailCar> {
                   .then((value) {
                 print('##26jan edit car success');
                 Get.back();
-                AppService().findCarModels().then((value) {
-                  carModel = CarModel.fromMap(map);
-                  setState(() {});
-                });
+                AppService().findCarModels().then(
+                  (value) {
+                    carModel = CarModel.fromMap(map);
+                    setState(() {});
+                  },
+                );
               });
             }
           },
         ));
+  }
+
+  void processDeleteCar(
+      {required String string,
+      required String keyMap,
+      required AppController appController}) {
+    TextEditingController textEditingController = TextEditingController();
+    textEditingController.text = string;
+
+    String? newText;
+
+    Widget widget = WidgetForm(
+      hint: '',
+      changeFunc: (p0) {
+        newText = p0.trim();
+      },
+      textEditingController: textEditingController,
+    );
+
+    AppDialog(context: context).normalDialog(
+      title: 'Delete ข้อมูลของรถ',
+      contentWidget: widget,
+      secondActionWidget: WidgetTextButton(
+          label: 'Delete',
+          pressFunc: () async {
+            if (newText?.isEmpty ?? false) {
+              Get.back();
+            } else {
+              Map<String, dynamic> map = carModel!.toMap();
+              map[keyMap] = newText;
+
+              await FirebaseFirestore.instance
+                  .collection('user')
+                  .doc(user!.uid)
+                  .collection('car')
+                  .doc(docIdCar)
+                  .delete()
+                  .then(
+                (value) {
+                  print('##26jan delete car success');
+                  Get.back();
+                  AppService().findCarModels().then(
+                    (value) {
+                      carModel = CarModel.fromMap(map);
+                      setState(() {});
+                    },
+                  );
+                },
+              );
+            }
+          }),
+    );
   }
 }

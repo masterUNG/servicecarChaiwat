@@ -95,8 +95,8 @@ class _BodyProfileMobileState extends State<BodyProfileMobile> {
                 pressFunc: () {
                   if (appController.carModels.length >= 2) {
                     AppDialog(context: context).normalDialog(
-                        title: 'รถเกิน 2 คัน',
-                        subTitle: 'รถเกิน 2 คันต้องเพิ่มรถก่อนคะ',
+                        title: 'จำนวนรถเกิน 2 คัน',
+                        subTitle: 'ต้องซื้อแพ็คเก็จเพิ่มรถก่อนคะ',
                         secondActionWidget: WidgetTextButton(
                           label: 'เพิ่มรถ',
                           pressFunc: () {

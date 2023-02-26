@@ -7,7 +7,7 @@ import 'package:tumservicecar/widgets/widget_text_button.dart';
 class AppDialog {
   final BuildContext context;
   AppDialog({
-    required this.context,
+    required this.context, 
   });
 
   void normalDialog({

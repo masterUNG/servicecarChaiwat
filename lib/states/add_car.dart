@@ -128,7 +128,7 @@ class _AddCarState extends State<AddCar> {
                               if (appController.xFiles.isEmpty) {
                                 AppSnackBar().normalSnackbar(
                                   title: 'ยังไม่มีรูปรถ',
-                                  message: 'กรูณาเลือกรูปรถอย่างน้อย 1 รูป',
+                                  message: 'กรุณาเลือกรูปรถอย่างน้อย 1 รูป',
                                   bgColor: Colors.red.shade700,
                                   textColor: Colors.white,
                                   snackPosition: SnackPosition.TOP,

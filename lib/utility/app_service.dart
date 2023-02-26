@@ -104,7 +104,7 @@ class AppService {
 
   Future<void> findUserModel() async {
     AppController appController = Get.put(AppController());
-    ;
+    
     var user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance
         .collection('user')
